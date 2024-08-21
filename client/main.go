@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/distributed-ledger/services"
+	"github.com/Distributed-Ledger/client/services"
 )
 
 func main() {
@@ -17,7 +17,7 @@ func main() {
 	)
 
 	for true {
-		fmt.Print("Enter a number (1)Check Money (2)Check Log (3)Transiction (4)Check Chain (5)Check All Chains (6)Quit : ")
+		fmt.Print("Enter a number (1)Check Money (2)Check Log (3)Transition (4)Check Chain (5)Check All Chains (6)Quit : ")
 		fmt.Scanln(&command)
 		switch command {
 		case "1":
@@ -25,7 +25,7 @@ func main() {
 		case "2":
 			services.CheckLog(wallet)
 		case "3":
-			services.Transiction(fromWallet, toWallet, amount)
+			services.Transition(fromWallet, toWallet, amount)
 		case "4":
 			services.CheckChain()
 		case "5":

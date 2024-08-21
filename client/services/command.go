@@ -3,8 +3,8 @@ package services
 import (
 	"fmt"
 
-	"github.com/distributed-ledger/utils"
-	"github.com/distributed-ledger/functions"
+	"github.com/Distributed-Ledger/client/utils"
+	"github.com/Distributed-Ledger/client/functions"
 )
 
 func CheckMoney(wallet string) {
@@ -20,10 +20,10 @@ func CheckLog(wallet string) {
 	fmt.Print("Enter which wallet: ")
 	fmt.Scanln(&wallet)
 	blocks := functions.ListAllBlock()
-	fmt.Println("History transictions: " + functions.SearchLog(wallet, blocks))
+	fmt.Println("History transitions: " + functions.SearchLog(wallet, blocks))
 }
 
-func Transiction(fromWallet string, toWallet string, amount string) {
+func Transition(fromWallet string, toWallet string, amount string) {
 	fmt.Print("Enter which wallet to use: ")
 	fmt.Scanln(&fromWallet)
 	if functions.CheckWallet(fromWallet) == false {
@@ -37,20 +37,20 @@ func Transiction(fromWallet string, toWallet string, amount string) {
 	fmt.Print("Enter amount: ")
 	fmt.Scanln(&amount)
 	if functions.TransitMoney(fromWallet, toWallet, amount) == false {
-		fmt.Println("Do not have enough money to complete transiction")
+		fmt.Println("Do not have enough money to complete transition")
 	} else {
 		if functions.CheckFirstBlock() == false {
 			functions.InitialzeFirstBlock()
 		}
 		targetBlock := functions.CheckWriteBlock()
 		if functions.CheckBlockMax(targetBlock) == false {
-			functions.WriteTransiction(fromWallet, toWallet, amount, targetBlock)
+			functions.WriteTransition(fromWallet, toWallet, amount, targetBlock)
 		} else {
 			newTxtName := functions.GetNewTxtName(targetBlock)
 			content := functions.RewriteTxt(targetBlock, newTxtName)
 			sha256Content := utils.Sha256Encrytion(content)
 			functions.InitialzeBlock(newTxtName, sha256Content)
-			functions.WriteTransiction(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
+			functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
 		}
 	}
 }

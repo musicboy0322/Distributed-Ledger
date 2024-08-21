@@ -76,7 +76,7 @@ func CheckWriteBlock() string {
 	return ""
 }
 
-func WriteTransiction(fromWallet string, toWallet string, money string, blockFile string) {
+func WriteTransition(fromWallet string, toWallet string, money string, blockFile string) {
 	file, err := os.OpenFile(blockFile, os.O_APPEND|os.O_WRONLY|os.O_CREATE, 0644)
     if err != nil {
         fmt.Println("无法打开文件:", err)
