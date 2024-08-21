@@ -1,7 +1,0 @@
-Sha256 of previous block: f5c8221f1f6d0eee3340b63cdfbf0dfab07dc14a20a19a07a4b8df3abc1fb3b4
-Next block: 4.txt
-D, A, 20
-A, B, 1
-A, B, 1
-A, B, 1
-A, B, 1

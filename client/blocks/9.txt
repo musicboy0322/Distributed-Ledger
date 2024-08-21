@@ -1,3 +1,0 @@
-Sha256 of previous block: c35378cfa0f616fa11d00fec4b867905d0a968cb649821c19ea53850afad6782
-Next block:
-B, A, 100

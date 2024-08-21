@@ -7,6 +7,11 @@ import (
 	"github.com/Distributed-Ledger/client/functions"
 )
 
+func InitialzeFolder() {
+	functions.InitialzeBlocksFolder()
+	functions.InitialzeWalletsFolder()
+}
+
 func CheckMoney(wallet string) {
 	fmt.Print("Enter which wallet: ")
 	fmt.Scanln(&wallet)
@@ -36,6 +41,7 @@ func Transition(fromWallet string, toWallet string, amount string) {
 	}
 	fmt.Print("Enter amount: ")
 	fmt.Scanln(&amount)
+	transitionInformation := fromWallet + "," + toWallet + "," + amount
 	if functions.TransitMoney(fromWallet, toWallet, amount) == false {
 		fmt.Println("Do not have enough money to complete transition")
 	} else {
@@ -45,12 +51,14 @@ func Transition(fromWallet string, toWallet string, amount string) {
 		targetBlock := functions.CheckWriteBlock()
 		if functions.CheckBlockMax(targetBlock) == false {
 			functions.WriteTransition(fromWallet, toWallet, amount, targetBlock)
+			functions.SocketConnection(transitionInformation)
 		} else {
 			newTxtName := functions.GetNewTxtName(targetBlock)
 			content := functions.RewriteTxt(targetBlock, newTxtName)
 			sha256Content := utils.Sha256Encrytion(content)
 			functions.InitialzeBlock(newTxtName, sha256Content)
 			functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
+			functions.SocketConnection(transitionInformation)
 		}
 	}
 }
@@ -58,15 +66,17 @@ func Transition(fromWallet string, toWallet string, amount string) {
 func CheckChain() {
 	blockSafety := true
 	blocks := functions.ListAllBlock()
-	for i := 0; i < len(blocks); i++ {
-		if i == 6 {
-			break
-		}
-		content := functions.GetAllBlockContent(blocks[i])
-		sha256Content := utils.Sha256Encrytion(content)
-		if functions.CheckSha256(blocks[i+1], sha256Content) == false {
-			blockSafety = false
-			break
+	if len(blocks) > 1 {
+		for i := 0; i < len(blocks); i++ {
+			if i == 6 {
+				break
+			}
+			content := functions.GetAllBlockContent(blocks[i])
+			sha256Content := utils.Sha256Encrytion(content)
+			if functions.CheckSha256(blocks[i+1], sha256Content) == false {
+				blockSafety = false
+				break
+			}
 		}
 	}
 	if blockSafety {

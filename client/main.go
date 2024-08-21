@@ -17,6 +17,7 @@ func main() {
 	)
 
 	for true {
+		services.InitialzeFolder()
 		fmt.Print("Enter a number (1)Check Money (2)Check Log (3)Transition (4)Check Chain (5)Check All Chains (6)Quit : ")
 		fmt.Scanln(&command)
 		switch command {

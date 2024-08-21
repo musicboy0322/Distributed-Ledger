@@ -7,6 +7,25 @@ import (
 	"fmt"
 )
 
+func InitialzeWalletsFolder() {
+	currentDir, err := os.Getwd()
+    if err != nil {
+        fmt.Println("获取当前目录失败:", err)
+        return
+    }
+	dirPath := currentDir + "/wallets" 
+	_, err = os.Stat(dirPath)
+    if os.IsNotExist(err) {
+		// 目录不存在，创建目录
+		err = os.Mkdir(dirPath, 0755)
+		if err != nil {
+			fmt.Println("创建目录失败:", err)
+			return
+		}
+		fmt.Println("目录不存在，已成功创建:", dirPath)
+    }
+}
+
 func CheckWallet(wallet string) bool {
 	wallet = "./wallets/" + wallet + ".txt"
 	_, err := os.Stat(wallet)
