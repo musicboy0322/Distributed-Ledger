@@ -158,7 +158,7 @@ func RewriteTxt(blockFile string, newTxtName string) string {
 }
 
 func InitialzeBlock(newTxtName string, sha256Content string) {
-	message := "Sha256 of previous block: " + sha256Content + "\nNext block: "
+	message := "Sha256 of previous block: " + sha256Content + "\nNext block:"
 	// 開啟或創建檔案
 	file, err := os.Create("./blocks/" + newTxtName)
 	if err != nil {

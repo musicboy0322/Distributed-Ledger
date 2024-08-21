@@ -1,5 +1,7 @@
 Sha256 of previous block: 78f47b0f21017517c76a95bd8b6c3d1268cfddc8299425249db6fc9c8b015162
-Next block:
+Next block: 8.txt
 A, B, 4
 A, B, 10
 A, B, 1
+A, B, 1
+B, A, 10
