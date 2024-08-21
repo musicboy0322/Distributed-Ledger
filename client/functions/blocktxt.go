@@ -10,7 +10,7 @@ import (
 )
 
 func CheckFirstBlock() bool {
-	_, err := os.Stat("blocks/1.txt")
+	_, err := os.Stat("./blocks/1.txt")
     if os.IsNotExist(err) {
         return false
     }
@@ -20,7 +20,7 @@ func CheckFirstBlock() bool {
 func InitialzeFirstBlock() {
 	message := "Sha256 of previous block:\nNext block:"
 	// 開啟或創建檔案
-	file, err := os.Create("blocks/1.txt")
+	file, err := os.Create("./blocks/1.txt")
 	if err != nil {
 		fmt.Println("無法創建檔案:", err)
 		return
@@ -160,7 +160,7 @@ func RewriteTxt(blockFile string, newTxtName string) string {
 func InitialzeBlock(newTxtName string, sha256Content string) {
 	message := "Sha256 of previous block: " + sha256Content + "\nNext block: "
 	// 開啟或創建檔案
-	file, err := os.Create("blocks/" + newTxtName)
+	file, err := os.Create("./blocks/" + newTxtName)
 	if err != nil {
 		fmt.Println("無法創建檔案:", err)
 		return
@@ -217,7 +217,8 @@ func ListAllBlock() []string {
 		lineNumber := 1
 		for scanner.Scan() {
 			if lineNumber == 2 {
-				nextBlockName = strings.Split(scanner.Text(), " ")[2]
+				nextBlockName = strings.Split(scanner.Text(), ":")[1]
+				nextBlockName = strings.TrimSpace(nextBlockName)
 				lineNumber++
 				continue
 			}
