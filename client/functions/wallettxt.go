@@ -10,19 +10,17 @@ import (
 func InitialzeWalletsFolder() {
 	currentDir, err := os.Getwd()
     if err != nil {
-        fmt.Println("获取当前目录失败:", err)
+        fmt.Println("Fail to get current directory:", err)
         return
     }
 	dirPath := currentDir + "/wallets" 
 	_, err = os.Stat(dirPath)
     if os.IsNotExist(err) {
-		// 目录不存在，创建目录
 		err = os.Mkdir(dirPath, 0755)
 		if err != nil {
-			fmt.Println("创建目录失败:", err)
+			fmt.Println("Fail to create file:", err)
 			return
 		}
-		fmt.Println("目录不存在，已成功创建:", dirPath)
     }
 }
 
@@ -39,7 +37,7 @@ func CheckBalance(wallet string) string {
 	fileName := "./wallets/" + wallet + ".txt"
 	file, err := os.Open(fileName)
 	if err != nil {
-		fmt.Println("無法開啟檔案:", err)
+		fmt.Println("Fail to open file:", err)
 	}
 	defer file.Close()
 
@@ -52,23 +50,20 @@ func CheckBalance(wallet string) string {
 
 func InitialzeWallet(wallet string) {
 	fileName := "./wallets/" + wallet + ".txt"
-	// 開啟或創建檔案
 	file, err := os.Create(fileName)
 	if err != nil {
-		fmt.Println("無法創建檔案:", err)
+		fmt.Println("Fail to open file:", err)
 		return
 	}
 	defer file.Close()
-
-	// 使用 bufio 寫入檔案
+	// use bufio to write data in file
 	writer := bufio.NewWriter(file)
 	_, err = writer.WriteString("100")
 	if err != nil {
-		fmt.Println("寫入檔案時出錯:", err)
+		fmt.Println("Encounter error when writing in data", err)
 		return
 	}
-
-	// 刷新緩衝區，確保所有內容都寫入檔案
+	// refresh buffer to confirm all data write in file
 	writer.Flush()
 }
 
@@ -79,46 +74,40 @@ func TransitMoney(fromWallet string, toWallet string, money string) bool {
 	moneyInt, _ = strconv.Atoi(money)
 	fromFileName := "./wallets/" + fromWallet + ".txt"
 	toFileName := "./wallets/" + toWallet + ".txt"
-
-
 	// from file
 	fromFile, err := os.Open(fromFileName)
 	if err != nil {
-		fmt.Println("無法開啟檔案:", err)
+		fmt.Println("Fail to open file:", err)
 	}
 	defer fromFile.Close()
 
 	fromScanner := bufio.NewScanner(fromFile)
 	for fromScanner.Scan() {
 		text := fromScanner.Text()
-		// 將字串轉換為整數
+		// turn string into int
 		number, _ := strconv.Atoi(text)
 		fromFileMoney = number - moneyInt
 		if fromFileMoney < 0 {
 			return false
 		}
 	}
-
 	fromFile, err = os.OpenFile(fromFileName, os.O_WRONLY | os.O_TRUNC, 0644)
 	fromWriter := bufio.NewWriter(fromFile)
 	_, err = fromWriter.WriteString(strconv.Itoa(fromFileMoney))
 	fromWriter.Flush()
-
 	// to file
 	toFile, err := os.Open(toFileName)
 	if err != nil {
-		fmt.Println("無法開啟檔案:", err)
+		fmt.Println("Fail to open file:", err)
 	}
 	defer toFile.Close()
-
 	toScanner := bufio.NewScanner(toFile)
 	for toScanner.Scan() {
 		text := toScanner.Text()
-		// 將字串轉換為整數
+		// turn string into int
 		number, _ := strconv.Atoi(text)
 		toFileMoney = number + moneyInt
 	}
-
 	toFile, err = os.OpenFile(toFileName, os.O_WRONLY | os.O_TRUNC, 0644)
 	toWriter := bufio.NewWriter(toFile)
 	_, err = toWriter.WriteString(strconv.Itoa(toFileMoney))

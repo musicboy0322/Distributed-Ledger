@@ -1,3 +1,4 @@
 Sha256 of previous block: b0ed53d7a8269cf4e63c8708c3c83d49d1615915afda3a7e7ac42d3a261b746a
 Next block:
 A, B, 10
+B, A, 10

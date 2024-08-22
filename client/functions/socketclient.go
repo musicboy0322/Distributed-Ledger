@@ -12,7 +12,6 @@ func SocketConnection(transitionInformation string) {
 		return
 	}
 	defer conn.Close()
-
 	_, err = conn.Write([]byte(transitionInformation)) 
 	if err != nil {
 		return
@@ -20,7 +19,7 @@ func SocketConnection(transitionInformation string) {
 	buf := [512]byte{}
 	n, err := conn.Read(buf[:])
 	if err != nil {
-		fmt.Println("recv failed, err:", err)
+		fmt.Println("Recv failed:", err)
 		return
 	}
 	fmt.Println(string(buf[:n]))

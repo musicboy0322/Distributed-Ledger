@@ -16,7 +16,7 @@ func Process(conn net.Conn) {
 		var buf [128]byte
 		n, err := reader.Read(buf[:]) 
 		if err != nil {
-			fmt.Println("read from client failed, err:", err)
+			fmt.Println("Read from client failed:", err)
 			break
 		}
 		recvStr := string(buf[:n])
