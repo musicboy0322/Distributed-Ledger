@@ -41,7 +41,7 @@ func Transition(fromWallet string, toWallet string, amount string) {
 	}
 	fmt.Print("Enter amount: ")
 	fmt.Scanln(&amount)
-	transitionInformation := fromWallet + "," + toWallet + "," + amount
+	information := "CMD3:" + fromWallet + "," + toWallet + "," + amount
 	if functions.TransitMoney(fromWallet, toWallet, amount) == false {
 		fmt.Println("Do not have enough money to complete transition")
 	} else {
@@ -51,14 +51,14 @@ func Transition(fromWallet string, toWallet string, amount string) {
 		targetBlock := functions.CheckWriteBlock()
 		if functions.CheckBlockMax(targetBlock) == false {
 			functions.WriteTransition(fromWallet, toWallet, amount, targetBlock)
-			functions.SocketConnection(transitionInformation)
+			functions.SocketConnection(information)
 		} else {
 			newTxtName := functions.GetNewTxtName(targetBlock)
 			content := functions.RewriteTxt(targetBlock, newTxtName)
 			sha256Content := utils.Sha256Encrytion(content)
 			functions.InitialzeBlock(newTxtName, sha256Content)
 			functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
-			functions.SocketConnection(transitionInformation)
+			functions.SocketConnection(information)
 		}
 	}
 }
@@ -84,4 +84,12 @@ func CheckChain() {
 	} else {
 		fmt.Println("Dangerous!Chain has been changed!") 
 	}
+}
+
+func CheckAllChain() {
+	blocks := functions.ListAllBlock()
+	finalBlock := blocks[len(blocks) - 1]
+	sha256Content := functions.GetSha256Value(finalBlock)
+	information := "CMD5:" + sha256Content
+	fmt.Println(functions.SocketConnection(information))
 }

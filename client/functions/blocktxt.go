@@ -280,3 +280,16 @@ func CheckSha256(nextBlockFile string, sha256Content string) bool {
 	}
 	return false
 }
+
+func GetSha256Value(blockFile string) string {
+	block, err := os.Open(blockFile)
+	if err != nil {
+		fmt.Println("Fail to open file:", err)
+	}
+	defer block.Close()
+	scanner := bufio.NewScanner(block)
+	for scanner.Scan() {
+		return strings.Split(scanner.Text(), " ")[4]
+	}
+	return ""
+}

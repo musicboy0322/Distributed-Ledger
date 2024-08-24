@@ -30,6 +30,7 @@ func main() {
 		case "4":
 			services.CheckChain()
 		case "5":
+			services.CheckAllChain()
 		case "6":
 			os.Exit(0)
 		default:
