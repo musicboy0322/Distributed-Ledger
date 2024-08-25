@@ -3,3 +3,4 @@ Next block:
 A, B, 10
 B, A, 10
 C, B, 10
+A, B, 10

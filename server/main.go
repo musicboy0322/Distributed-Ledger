@@ -27,12 +27,12 @@ func main() {
 			return
 		}
     }
-    listen, err := net.Listen("tcp", "127.0.0.1:" + port)
+    listen, err := net.Listen("tcp", "0.0.0.0:" + port)
 	if err != nil {
 		fmt.Println("Listen failed:", err)
 		return
 	}
-	log.Println("Listen to 127.0.0.1:" + port)
+	log.Println("Listen to 0.0.0.0:" + port)
 	for {
 		conn, err := listen.Accept()
 		if err != nil {
