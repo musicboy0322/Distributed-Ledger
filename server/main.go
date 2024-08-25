@@ -6,9 +6,12 @@ import (
 	"fmt"
 	"log"
 	"github.com/Distributed-Ledger/server/functions"
+	"github.com/Distributed-Ledger/server/utils"
 )
 
 func main() {
+
+	port := utils.GetServerPort()	
 
 	currentDir, err := os.Getwd()
     if err != nil {
@@ -24,12 +27,12 @@ func main() {
 			return
 		}
     }
-    listen, err := net.Listen("tcp", "127.0.0.1:8080")
+    listen, err := net.Listen("tcp", "127.0.0.1:" + port)
 	if err != nil {
 		fmt.Println("Listen failed:", err)
 		return
 	}
-	log.Println("Listen to 127.0.0.1:8080")
+	log.Println("Listen to 127.0.0.1:" + port)
 	for {
 		conn, err := listen.Accept()
 		if err != nil {
