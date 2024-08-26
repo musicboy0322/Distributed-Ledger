@@ -1,0 +1,3 @@
+Sha256 of previous block: db9bfd0c36c48f67e989485e1b534bc3bb18d55e027d73512d478e5c0301ff25
+Next block:
+A, B, 10

@@ -113,7 +113,7 @@ func CheckChain() {
 	blocks := functions.ListAllBlock()
 	if len(blocks) > 1 {
 		for i := 0; i < len(blocks); i++ {
-			if i == 6 {
+			if i == len(blocks) - 1 {
 				break
 			}
 			content := functions.GetAllBlockContent(blocks[i])
