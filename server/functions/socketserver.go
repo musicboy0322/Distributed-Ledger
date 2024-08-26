@@ -2,7 +2,6 @@ package functions
 
 import (
     "bufio"
-    "fmt"
     "net"
 	"log"
 	"strings"
@@ -31,7 +30,7 @@ func Process(conn net.Conn) {
 			fromWallet := temp[0]
 			toWallet := temp[1]
 			amount := temp[2]
-			log.Println(fromWallet + ", " + toWallet + ", " + money)
+			log.Println(fromWallet + ", " + toWallet + ", " + amount)
 			if functions.CheckFirstBlock() == false {
 				functions.InitialzeFirstBlock()
 			}
