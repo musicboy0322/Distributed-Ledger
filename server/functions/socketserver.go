@@ -42,16 +42,16 @@ func Process(conn net.Conn) {
 				functions.InitialzeBlock(newTxtName, sha256Content)
 				functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
 			}
-			conn.Write([]byte("Write in blockchain sucessfully"))
+			conn.Write([]byte("true"))
 		case "CMD5":
 			clientSha256Content := strings.Split(recvStr, ":")[1]
 			blocks := functions.ListAllBlock()
 			finalBlock := blocks[len(blocks) - 1]
 			sha256Content := functions.GetSha256Value(finalBlock)
 			if clientSha256Content == sha256Content {
-				conn.Write([]byte("correct"))
+				conn.Write([]byte("true"))
 			} else {
-				conn.Write([]byte("wrong"))
+				conn.Write([]byte("false"))
 			}
 		}
 	}	
