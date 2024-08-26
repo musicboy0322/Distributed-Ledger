@@ -4,6 +4,7 @@ import (
     "bufio"
     "fmt"
     "net"
+	"log"
 	"strings"
 	"github.com/Distributed-Ledger/client/utils"
 	"github.com/Distributed-Ledger/client/functions"
@@ -11,12 +12,13 @@ import (
 
 func Process(conn net.Conn) {
 	defer conn.Close() 
+	clientAddr := conn.RemoteAddr().String()
+	log.Println("Client connected from ", clientAddr)
 	for {
 		reader := bufio.NewReader(conn)
 		var buf [128]byte
 		n, err := reader.Read(buf[:]) 
 		if err != nil {
-			fmt.Println("Read from client failed:", err)
 			break
 		}
 		recvStr := string(buf[:n])
@@ -29,6 +31,7 @@ func Process(conn net.Conn) {
 			fromWallet := temp[0]
 			toWallet := temp[1]
 			amount := temp[2]
+			log.Println(fromWallet + ", " + toWallet + ", " + money)
 			if functions.CheckFirstBlock() == false {
 				functions.InitialzeFirstBlock()
 			}
@@ -48,6 +51,7 @@ func Process(conn net.Conn) {
 			blocks := functions.ListAllBlock()
 			finalBlock := blocks[len(blocks) - 1]
 			sha256Content := functions.GetSha256Value(finalBlock)
+			log.Println("Client last sha256:" + clientSha256Content + " Server last256:" + sha256Content)
 			if clientSha256Content == sha256Content {
 				conn.Write([]byte("true"))
 			} else {

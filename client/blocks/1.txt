@@ -1,4 +1,3 @@
 Sha256 of previous block:
 Next block:
 A, B, 1
-A, B, 1
