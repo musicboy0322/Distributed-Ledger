@@ -12,7 +12,7 @@ import (
 func Process(conn net.Conn) {
 	defer conn.Close() 
 	clientAddr := conn.RemoteAddr().String()
-	log.Println("Client connected from ", clientAddr)
+	log.Println("Client connected from:", clientAddr)
 	for {
 		reader := bufio.NewReader(conn)
 		var buf [128]byte
@@ -30,7 +30,7 @@ func Process(conn net.Conn) {
 			fromWallet := temp[0]
 			toWallet := temp[1]
 			amount := temp[2]
-			log.Println(fromWallet + ", " + toWallet + ", " + amount)
+			log.Println("Write in data: " + fromWallet + ", " + toWallet + ", " + amount)
 			if functions.CheckFirstBlock() == false {
 				functions.InitialzeFirstBlock()
 			}
