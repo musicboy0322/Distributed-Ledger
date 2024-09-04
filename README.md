@@ -7,6 +7,9 @@
 * Feature：
     * Implementing multi-threading to increase system throughput and concurrency, allowing multiple node connections to be handled simultaneously
     * Using TCP socket for node-to-node communication
+    * Using Docker to stimulate mutiple nodes
+      
+      <img width="1187" alt="截圖 2024-08-26 下午4 02 42" src="https://github.com/user-attachments/assets/e63cb1a1-9c37-41a6-9c21-41cb8c1621fb">
       
 * Command：
     * Check Money：Verify the balance of target wallet
@@ -14,11 +17,14 @@
     * Transition：Transfer money from one wallet to another
     * Check Chain：Check if the local block has been altered
     * Check All Chains：Check if any blocks across all nodes have been altered
-      
+
 * Technique：
     * Programing Language：Golang
     * Network Programing：socket、TCP
+    * Containerization Tool：Docker
       
 * Future Expectation：
     * Adding a heartbeat mechanism to monitor the status of long connections and prevent redundant or stale connections
     * Implementing a load balancing mechanism to distribute incoming transitions, preventing overload on any one server and improving system performance and stability
+
+* Demo：https://youtu.be/h7gLIvKN9pk
