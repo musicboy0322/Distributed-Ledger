@@ -7,7 +7,7 @@
 
 * Feature：
     * Implementing multi-threading to increase system throughput and concurrency, allowing multiple node connections to be handled simultaneously
-    * Using TCP socket for node-to-node communication
+    * Using TCP Socket for node-to-node communication
     * Using Docker to stimulate mutiple nodes
       
       <img width="1187" alt="截圖 2024-08-26 下午4 02 42" src="https://github.com/user-attachments/assets/e63cb1a1-9c37-41a6-9c21-41cb8c1621fb">
