@@ -21,7 +21,7 @@
 
 * Technique：
     * Programing Language：Golang
-    * Network Programing：socket、TCP
+    * Network Programing：Socket、TCP
     * Containerization Tool：Docker
       
 * Future Expectation：
