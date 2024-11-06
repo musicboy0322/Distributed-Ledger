@@ -3,7 +3,7 @@
 * Motivation：My friends and I are developing a blockchain-related system. During the process, I realized that blockchain is built on a distributed system, a field I had never explored before.
   This realization inspired me to actively seek out new knowledge and challenge myself to implement and build a distributed system, expanding my skills and understanding in this area.
 
-* Purpose：Using the concept of distributed systems to build an application that simulates blockchain.
+* Purpose：Using distributed ledger concepts to build an application that simulates blockchain-like functionality.
 
 * Feature：
     * Implementing multi-threading to increase system throughput and concurrency, allowing multiple node connections to be handled simultaneously
