@@ -26,6 +26,6 @@ func SocketConnection(ports []int, information string) bool {
 		}
 		return true
 	}
-	fmt.Println("None entry node avaliable")
+	fmt.Println("None node avaliable")
 	return false
 }

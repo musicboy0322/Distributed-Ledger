@@ -3,3 +3,4 @@ Next block:
 B, A, 25
 C, D, 26
 B, C, 50
+A, B, 1
