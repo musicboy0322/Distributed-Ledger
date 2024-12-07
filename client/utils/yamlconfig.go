@@ -6,7 +6,7 @@ import (
 	"github.com/spf13/viper"
 )
 
-func GetServerPort() []int {
+func GetEnterPorts() []int {
 	// set viper read config
 	vp := viper.New()
 	vp.SetConfigName("config")
@@ -16,6 +16,6 @@ func GetServerPort() []int {
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
-    serverPorts := vp.GetIntSlice("server_ports")
-	return serverPorts
+    enterPorts := vp.GetIntSlice("enter_ports")
+	return enterPorts
 }

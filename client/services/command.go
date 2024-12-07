@@ -2,8 +2,6 @@ package services
 
 import (
 	"fmt"
-	"strconv"
-	"sync"
 	"github.com/Distributed-Ledger/client/utils"
 	"github.com/Distributed-Ledger/client/functions"
 )
@@ -30,11 +28,6 @@ func CheckLog(wallet string) {
 }
 
 func Transition(fromWallet string, toWallet string, amount string) {
-	// intialze variable to record mutiple return from thread 
-	correctReturn := 0
-	var wg sync.WaitGroup
-	results := make(chan string, 3)
-
 	// procedure of asking information
 	fmt.Print("Enter which wallet to use: ")
 	fmt.Scanln(&fromWallet)
@@ -61,24 +54,12 @@ func Transition(fromWallet string, toWallet string, amount string) {
 		if functions.CheckBlockMax(targetBlock) == false {
 			// situation of block not full
 			functions.WriteTransition(fromWallet, toWallet, amount, targetBlock)
-			ports := utils.GetServerPort()
-			for _, port := range ports {
-				portString := strconv.Itoa(port)
-				wg.Add(1) 
-				go functions.SocketConnection(portString, information ,&wg, results) 
+			ports := utils.GetEnterPorts()
+			result := functions.SocketConnection(ports, information)
+			if result == false {
+				fmt.Println("Fail to write in block")
 			}
-			wg.Wait()
-    		close(results)
-			for result := range results {
-				if result == "true" {
-					correctReturn++
-				}
-			}
-			if correctReturn == len(ports) {
-				fmt.Println("Sucessfully write in block")
-				return
-			}
-			fmt.Println("Fail to write in block")
+			fmt.Println("Sucessfully write in block")
 		} else {
 			// situation of block is full
 			newTxtName := functions.GetNewTxtName(targetBlock)
@@ -86,24 +67,12 @@ func Transition(fromWallet string, toWallet string, amount string) {
 			sha256Content := utils.Sha256Encrytion(content)
 			functions.InitialzeBlock(newTxtName, sha256Content)
 			functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
-			ports := utils.GetServerPort()
-			for _, port := range ports {
-				portString := strconv.Itoa(port)
-				wg.Add(1) 
-				go functions.SocketConnection(portString, information ,&wg, results) 
+			ports := utils.GetEnterPorts()
+			result := functions.SocketConnection(ports, information)
+			if result == false {
+				fmt.Println("Fail to write in block")
 			}
-			wg.Wait()
-    		close(results)
-			for result := range results {
-				if result == "true" {
-					correctReturn++
-				}
-			}
-			if correctReturn == len(ports) {
-				fmt.Println("Sucessfully write in block")
-				return
-			}
-			fmt.Println("Fail to write in block")
+			fmt.Println("Sucessfully write in block")
 		}
 	}
 }
@@ -132,11 +101,6 @@ func CheckChain() {
 }
 
 func CheckAllChain() {
-	// intialze variable to record mutiple return from thread 
-	correctReturn := 0
-	var wg sync.WaitGroup
-	results := make(chan string, 3)
-
 	// process
 	blocks := functions.ListAllBlock()
 	if len(blocks) == 1 {
@@ -146,22 +110,11 @@ func CheckAllChain() {
 	finalBlock := blocks[len(blocks) - 1]
 	sha256Content := functions.GetSha256Value(finalBlock)
 	information := "CMD5:" + sha256Content
-	ports := utils.GetServerPort()
-	for _, port := range ports {
-		portString := strconv.Itoa(port)
-		wg.Add(1) 
-		go functions.SocketConnection(portString, information ,&wg, results) 
+	ports := utils.GetEnterPorts()
+
+	result := functions.SocketConnection(ports, information)
+	if result == false {
+		fmt.Println("Fail to check other block or some block been changed")
 	}
-	wg.Wait()
-	close(results)
-	for result := range results {
-		if result == "true" {
-			correctReturn++
-		}
-	}
-	if correctReturn == len(ports) {
-		fmt.Println("All block safe")
-		return
-	}
-	fmt.Println("Dangerous! Some block been changed")
+	fmt.Println("All block safe")
 }

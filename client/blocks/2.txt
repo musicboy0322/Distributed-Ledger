@@ -1,3 +1,7 @@
-Sha256 of previous block: db9bfd0c36c48f67e989485e1b534bc3bb18d55e027d73512d478e5c0301ff25
-Next block:
-A, B, 10
+Sha256 of previous block: 663d72266fd479fbae77ced774fad24a550849e8113705229ce5de2b500a2c40
+Next block: 3.txt
+A, B, 1
+A, B, 1
+B, A, 20
+A, B, 50
+A, B, 23
