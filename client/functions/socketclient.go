@@ -19,12 +19,15 @@ func SocketConnection(ports []int, information string) bool {
 		if err != nil {
 		}
 		buf := [512]byte{}
-		_, err = conn.Read(buf[:])
+		result, err = conn.Read(buf[:])
 		if err != nil {
 			fmt.Println("Recv failed:", err)
 			return false
 		}
-		return true
+		if result == "true" {
+			return true
+		}
+		return false
 	}
 	fmt.Println("None node avaliable")
 	return false
