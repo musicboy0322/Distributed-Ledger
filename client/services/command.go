@@ -3,6 +3,7 @@ package services
 import (
 	"fmt"
 	"github.com/Distributed-Ledger/client/utils"
+	"github.com/Distributed-Ledger/client/models"
 	"github.com/Distributed-Ledger/client/functions"
 )
 
@@ -42,8 +43,14 @@ func Transition(fromWallet string, toWallet string, amount string) {
 	fmt.Print("Enter amount: ")
 	fmt.Scanln(&amount)
 
+	information := models.CMD3Message {
+		Command: "CMD3"
+		FromWallet: fromWallet
+		ToWallet: toWallet
+		Amount: amount
+	}
+
 	// process
-	information := "CMD3:" + fromWallet + "," + toWallet + "," + amount
 	if functions.TransitMoney(fromWallet, toWallet, amount) == false {
 		fmt.Println("Do not have enough money to complete transition")
 	} else {
@@ -109,7 +116,12 @@ func CheckAllChain() {
 	}
 	finalBlock := blocks[len(blocks) - 1]
 	sha256Content := functions.GetSha256Value(finalBlock)
-	information := "CMD5:" + sha256Content
+
+	information := models.CMD5Message {
+		Command: "CMD5",
+		Sha256Content: sha256Content
+	}
+
 	ports := utils.GetEnterPorts()
 
 	result := functions.SocketConnection(ports, information)
