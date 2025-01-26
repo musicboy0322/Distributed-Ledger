@@ -1,6 +1,7 @@
 Sha256 of previous block: 60fac10823d338bf26f4b5b766d4845567e9b88c22ad8758aac7296ffcf07553
-Next block:
+Next block: 4.txt
 B, A, 25
 C, D, 26
 B, C, 50
+A, B, 1
 A, B, 1

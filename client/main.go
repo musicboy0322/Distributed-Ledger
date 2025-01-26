@@ -5,6 +5,7 @@ import (
 	"os"
 
 	"github.com/Distributed-Ledger/client/services"
+	"github.com/Distributed-Ledger/client/utils"
 )
 
 func main() {
@@ -16,8 +17,10 @@ func main() {
 		amount string
 	)
 
+	services.InitialzeFolder()
+	ports := utils.GetEnterPorts()
+
 	for true {
-		services.InitialzeFolder()
 		fmt.Print("Enter a number (1)Check Money (2)Check Log (3)Transition (4)Check Chain (5)Check All Chains (6)Quit : ")
 		fmt.Scanln(&command)
 		switch command {
@@ -26,11 +29,11 @@ func main() {
 		case "2":
 			services.CheckLog(wallet)
 		case "3":
-			services.Transition(fromWallet, toWallet, amount)
+			services.Transition(fromWallet, toWallet, amount, ports)
 		case "4":
 			services.CheckChain()
 		case "5":
-			services.CheckAllChain()
+			services.CheckAllChain(ports)
 		case "6":
 			os.Exit(0)
 		default:

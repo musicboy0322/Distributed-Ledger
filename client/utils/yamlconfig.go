@@ -16,6 +16,6 @@ func GetEnterPorts() []int {
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
 	}
-    enterPorts := vp.GetIntSlice("enter_ports")
+    enterPorts := vp.GetIntSlice("server_ports")
 	return enterPorts
 }

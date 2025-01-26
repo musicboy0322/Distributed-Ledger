@@ -28,7 +28,7 @@ func CheckLog(wallet string) {
 	fmt.Println("History transitions: " + functions.SearchLog(wallet, blocks))
 }
 
-func Transition(fromWallet string, toWallet string, amount string) {
+func Transition(fromWallet string, toWallet string, amount string, ports []int) {
 	// procedure of asking information
 	fmt.Print("Enter which wallet to use: ")
 	fmt.Scanln(&fromWallet)
@@ -44,12 +44,15 @@ func Transition(fromWallet string, toWallet string, amount string) {
 	fmt.Scanln(&amount)
 
 	information := models.CMD3Message {
-		Command: "CMD3"
-		FromWallet: fromWallet
-		ToWallet: toWallet
-		Amount: amount
+		Category: "SC",
+		Command: "CMD3",
+		FromWallet: fromWallet,
+		ToWallet: toWallet,
+		Amount: amount,
 	}
 
+	// random choose a port for connecting
+	port := utils.GetRandomPort(ports)
 	// process
 	if functions.TransitMoney(fromWallet, toWallet, amount) == false {
 		fmt.Println("Do not have enough money to complete transition")
@@ -61,8 +64,7 @@ func Transition(fromWallet string, toWallet string, amount string) {
 		if functions.CheckBlockMax(targetBlock) == false {
 			// situation of block not full
 			functions.WriteTransition(fromWallet, toWallet, amount, targetBlock)
-			ports := utils.GetEnterPorts()
-			result := functions.SocketConnection(ports, information)
+			result := functions.SocketConnection(port, information)
 			if result == false {
 				fmt.Println("Fail to write in block")
 			}
@@ -74,8 +76,7 @@ func Transition(fromWallet string, toWallet string, amount string) {
 			sha256Content := utils.Sha256Encrytion(content)
 			functions.InitialzeBlock(newTxtName, sha256Content)
 			functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
-			ports := utils.GetEnterPorts()
-			result := functions.SocketConnection(ports, information)
+			result := functions.SocketConnection(port, information)
 			if result == false {
 				fmt.Println("Fail to write in block")
 			}
@@ -107,7 +108,7 @@ func CheckChain() {
 	}
 }
 
-func CheckAllChain() {
+func CheckAllChain(ports []int) {
 	// process
 	blocks := functions.ListAllBlock()
 	if len(blocks) == 1 {
@@ -118,13 +119,14 @@ func CheckAllChain() {
 	sha256Content := functions.GetSha256Value(finalBlock)
 
 	information := models.CMD5Message {
+		Category: "SC",
 		Command: "CMD5",
-		Sha256Content: sha256Content
+		Sha256Content: sha256Content,
 	}
 
-	ports := utils.GetEnterPorts()
+	port := utils.GetRandomPort(ports)
 
-	result := functions.SocketConnection(ports, information)
+	result := functions.SocketConnection(port, information)
 	if result == false {
 		fmt.Println("Fail to check other block or some block been changed")
 	}
