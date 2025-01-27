@@ -1,0 +1,7 @@
+Sha256 of previous block:
+Next block: 2.txt
+A, B, 1
+A, B, 1
+A, B, 1
+A, B, 1
+A, B, 1

@@ -1,0 +1,6 @@
+Sha256 of previous block: b5fd77cbafbd69c3acc3acf99555a951de90be3bf20d29df73d382a7c0773034
+Next block:
+A, B, 1
+A, B, 1
+A, B, 1
+B, A, 50
