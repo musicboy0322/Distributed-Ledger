@@ -1,4 +1,0 @@
-Sha256 of previous block: 08fb9ed71cc04204e4e39e393727241a9dff118117d3c168f674e9fbcfffb267
-Next block:
-A, B, 3
-A, B, 1

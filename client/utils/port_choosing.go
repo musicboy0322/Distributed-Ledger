@@ -18,7 +18,6 @@ func GetRandomPort(ports []int) int {
 	
 	// Generate a random index based on the length of the ports slice
 	randomIndex := rand.Intn(len(ports))
-	fmt.Println(randomIndex)
 	// Return the randomly selected port
 	return ports[randomIndex]
 }
