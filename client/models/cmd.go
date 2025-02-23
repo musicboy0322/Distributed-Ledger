@@ -10,6 +10,24 @@ type CommandMessage interface {
 	Serialize() ([]byte, error)
 }
 
+type CMD2Message struct {
+	Category string
+	Command string
+	Wallet string
+}
+
+func (c CMD2Message) GetCategory() string {
+	return c.Category
+}
+
+func (c CMD2Message) GetCommand() string {
+	return c.Command
+}
+
+func (c CMD2Message) Serialize() ([]byte, error) {
+	return json.Marshal(c)
+}
+
 type CMD3Message struct {
 	Category string
 	Command string
@@ -30,6 +48,7 @@ func (c CMD3Message) Serialize() ([]byte, error) {
 	return json.Marshal(c)
 }
 
+/*
 type CMD5Message struct {
 	Category string
 	Command string
@@ -47,3 +66,4 @@ func (c CMD5Message) GetCommand() string {
 func (c CMD5Message) Serialize() ([]byte, error) {
 	return json.Marshal(c)
 }
+*/

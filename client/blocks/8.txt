@@ -1,0 +1,7 @@
+Sha256 of previous block: d335a28590492250c5bf52cd3e780728a8b394174161c3b152cb3b4662bdeb48
+Next block: 9.txt
+C, A, 21
+A, C, 23
+B, A, 21
+C, D, 11
+B, A, 10

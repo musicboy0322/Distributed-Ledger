@@ -13,19 +13,32 @@ func InitialzeFolder() {
 }
 
 func CheckMoney(wallet string) {
+	// get user message
 	fmt.Print("Enter which wallet: ")
 	fmt.Scanln(&wallet)
 	if functions.CheckWallet(wallet) == false {
 		functions.InitialzeWallet(wallet)
 	}
-	fmt.Println("Balance: " + functions.CheckBalance(wallet))
+	balance := functions.CheckBalance(wallet)
+	// display result
+	fmt.Println("Balance: " + balance)
 }
 
-func CheckLog(wallet string) {
+func CheckLog(wallet string, ports []int) {
+	// get user message
 	fmt.Print("Enter which wallet: ")
 	fmt.Scanln(&wallet)
-	blocks := functions.ListAllBlock()
-	fmt.Println("History transitions: " + functions.SearchLog(wallet, blocks))
+	// set socket connect message
+	information := models.CMD2Message {
+		Category: "SC",
+		Command: "CMD2",
+		Wallet: wallet,
+	}
+	// random choose a port for connecting
+	port := utils.GetRandomPort(ports)
+	// socket connect
+	result := functions.SocketConnection(port, information)
+	fmt.Println("History transitions: " + result)	
 }
 
 func Transition(fromWallet string, toWallet string, amount string, ports []int) {
@@ -65,7 +78,7 @@ func Transition(fromWallet string, toWallet string, amount string, ports []int) 
 			// situation of block not full
 			functions.WriteTransition(fromWallet, toWallet, amount, targetBlock)
 			result := functions.SocketConnection(port, information)
-			if result == false {
+			if result == "false" {
 				fmt.Println("Fail to write in block")
 			}
 			fmt.Println("Sucessfully write in block")
@@ -77,7 +90,7 @@ func Transition(fromWallet string, toWallet string, amount string, ports []int) 
 			functions.InitialzeBlock(newTxtName, sha256Content)
 			functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
 			result := functions.SocketConnection(port, information)
-			if result == false {
+			if result == "false" {
 				fmt.Println("Fail to write in block")
 			}
 			fmt.Println("Sucessfully write in block")
@@ -85,6 +98,7 @@ func Transition(fromWallet string, toWallet string, amount string, ports []int) 
 	}
 }
 
+/*
 func CheckChain() {
 	blockSafety := true
 	blocks := functions.ListAllBlock()
@@ -107,7 +121,9 @@ func CheckChain() {
 		fmt.Println("Dangerous!Chain has been changed!") 
 	}
 }
+*/
 
+/*
 func CheckAllChain(ports []int) {
 	// process
 	blocks := functions.ListAllBlock()
@@ -132,3 +148,4 @@ func CheckAllChain(ports []int) {
 	}
 	fmt.Println("All block safe")
 }
+*/
