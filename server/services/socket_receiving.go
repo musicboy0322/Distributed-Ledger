@@ -4,33 +4,15 @@ import (
     "net"
 	"log"
 	"fmt"
+	"time"
 	"encoding/json"
 	"github.com/Distributed-Ledger/server/utils"
 	"github.com/Distributed-Ledger/server/models"
 	"github.com/Distributed-Ledger/server/functions"
 )
 
-func StartServer(port string) {
-	listen, err := net.Listen("tcp", "0.0.0.0:" + port)
-	if err != nil {
-		fmt.Println("Listen failed:", err)
-		return
-	}
-	log.Println("Listen to 0.0.0.0:" + port)
-	for {
-		// receive new connection
-		conn, err := listen.Accept()
-		if err != nil {
-			fmt.Println("Accept failed:", err)
-			continue
-		}
-		// handle new connection and basically for short connection
-		go HandleNewConnection(conn) 
-	}
-}
-
 //storage_queue chan string
-func HandleNewConnection(conn net.Conn) {
+func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message, chcmd5 chan models.CMD5Message) {
 	defer conn.Close()
 	// get remote ip address
 	remoteAddr := conn.RemoteAddr().String()
@@ -66,52 +48,80 @@ func HandleNewConnection(conn net.Conn) {
 	
 	// detect long connection or short connection
 	if category == "LC" {
-		fmt.Println("long connection: " + remoteAddr)
-		//functions.HandleLongConnection(conn)
+		log.Println("Long connection: " + remoteAddr)
+		HandleLongConnection(conn)
 	} else if category == "SC" {
-		fmt.Println("short connection: " + remoteAddr + ", about: " + command)
+		log.Println("Short connection: " + remoteAddr + ", about: " + command)
 		switch command {
 		case "CMD3":
 			var currentMessage models.CMD3Message
 			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
 			if err != nil {
-				fmt.Println("Error unmarshaling JSON:", err)
+				log.Println("Error unmarshaling JSON:", err)
 				return
+			}
+			currentMessage.Category = "LC"
+			chcmd3 <- currentMessage
+			HandleCMD3(conn, currentMessage)
+		case "CMD5":
+			var currentMessage models.CMD5Message
+			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
+			if err != nil {
+				log.Println("Error unmarshaling JSON:", err)
+				return
+			}
+			currentMessage.Category = "LC"
+			chcmd5 <- currentMessage
+			HandleCMD5(conn, currentMessage)
+		}
+	}
+}
+
+func HandleLongConnection(conn net.Conn) {
+	buf := make([]byte, 1024)
+	for {
+		conn.SetReadDeadline(time.Now().Add(30 * time.Second))
+
+		n, err := conn.Read(buf)
+		if err != nil {
+			fmt.Println("Error reading message:", err)
+		}
+
+		// deserialize json format for detecting long connection or short connection
+		var temp map[string]interface{}
+		err = json.Unmarshal(buf[:n], &temp)
+		if err != nil {
+			fmt.Println("Error unmarshaling JSON:", err)
+		}
+		// Check if the "Command" field is present and is a string
+		command, ok := temp["Command"].(string)
+		if !ok {
+			fmt.Println("Error: Command field is missing or not a string")
+		}
+		switch command {
+		case "CMD3":
+			var currentMessage models.CMD3Message
+			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
+			if err != nil {
+				log.Println("Error unmarshaling JSON:", err)
 			}
 			HandleCMD3(conn, currentMessage)
 		case "CMD5":
 			var currentMessage models.CMD5Message
 			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
 			if err != nil {
-				fmt.Println("Error unmarshaling JSON:", err)
-				return
+				log.Println("Error unmarshaling JSON:", err)
 			}
 			HandleCMD5(conn, currentMessage)
 		}
-	}
-}
-
-/*
-func HandleLongConnection(conn net.Conn) {
-	for {
-		// receive message
-		message, err := reader.ReadString('\n')
-		if err != nil {
-			fmt.Println("Long connection closed:", err)
-			break
-		}
-		message = strings.TrimSpace(message)
-		fmt.Printf("Received from long connection: %s\n", message)
-
 		// 回應數據
-		_, err = conn.Write([]byte("Server Acknowledged: " + message + "\n"))
+		_, err = conn.Write([]byte("Server Acknowledged: "))
 		if err != nil {
 			fmt.Println("Error writing to long connection:", err)
 			break
 		}
 	}
 }
-	*/
 
 func HandleCMD3(conn net.Conn, message models.CMD3Message) {
 	fromWallet := message.FromWallet

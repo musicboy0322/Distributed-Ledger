@@ -47,3 +47,20 @@ func (c CMD5Message) GetCommand() string {
 func (c CMD5Message) Serialize() ([]byte, error) {
 	return json.Marshal(c)
 }
+
+type INITMessage struct {
+	Category string
+	Command string
+}
+
+func (c INITMessage) GetCategory() string {
+	return c.Category
+}
+
+func (c INITMessage) GetCommand() string {
+	return c.Command
+}
+
+func (c INITMessage) Serialize() ([]byte, error) {
+	return json.Marshal(c)
+}
