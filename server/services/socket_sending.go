@@ -3,7 +3,6 @@ package services
 import (
     "net"
 	"log"
-	"fmt"
 	"time"
 	"github.com/Distributed-Ledger/server/models"
 	"github.com/Distributed-Ledger/server/functions"
@@ -39,7 +38,7 @@ func ConnectNode(other_port string, chcmd3 chan models.CMD3Message) {
 		return
 	}
 	defer conn.Close()
-	log.Println("Connected to: " + node_address)
+	log.Println("Long connection to: " + node_address)
 
 	information := models.INITMessage {"LC", "INIT"}
 	serializedInformation, err := information.Serialize()
@@ -59,8 +58,6 @@ func ConnectNode(other_port string, chcmd3 chan models.CMD3Message) {
 	for {
 		select {
 		case information := <-chcmd3:
-			fmt.Println("cmd3")
-			fmt.Println(information)
 			serializedInformation, err := information.Serialize()
 			if err != nil {
 				log.Println("Error serializing information:", err)

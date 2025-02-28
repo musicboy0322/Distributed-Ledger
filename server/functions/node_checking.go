@@ -2,7 +2,7 @@ package functions
 
 import (
 	"net"
-	"fmt"
+	"log"
 	"time"
 )
 
@@ -15,10 +15,11 @@ const (
 func CheckNodeAvaliable(node_address string) bool {
 	conn, err := net.DialTimeout("tcp", node_address, avaliableTimeout)
 	if err != nil {
-		fmt.Printf("Server %s is not reachable: %v\n", node_address, err)
+		log.Printf("Long connection not reachable: %s", node_address)
 		return false
 	}
 	defer conn.Close()
+	conn.Write([]byte("Checking node avaliable or not"))
 	return true
 }
 

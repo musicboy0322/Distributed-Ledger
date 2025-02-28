@@ -23,12 +23,12 @@ func main() {
 		fmt.Println("Listen failed:", err)
 		return
 	}
-	log.Println("Listen to 127.0.0.1:" + port)
+	log.Println("Node open: 127.0.0.1:" + port)
 
-	// sending functionality
+	// open sending functionality
 	services.ConnectNodes(other_ports, CMD3Channel)
 
-	// receiving functionality
+	// open receiving functionality
 	for {
 		conn, err := listen.Accept()
 		if err != nil {

@@ -19,53 +19,31 @@ func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message) {
 	buf := make([]byte, 1024)  // Adjust the buffer size based on your message size
 	n, err := conn.Read(buf)
 	if err != nil {
-		fmt.Println("Error reading message:", err)
-		return
+		fmt.Println("reading message:", err)
 	}
-
 	// deserialize json format for detecting long connection or short connection
 	var temp map[string]interface{}
-    err = json.Unmarshal(buf[:n], &temp)
-    if err != nil {
-        fmt.Println("Error unmarshaling JSON:", err)
-        return
-    }
+    _ = json.Unmarshal(buf[:n], &temp)
 	// Check if the "Command" field is present and is a string
-	command, ok := temp["Command"].(string)
-	if !ok {
-		fmt.Println("Error: Command field is missing or not a string")
-		return
-	}
-	
+	command, _ := temp["Command"].(string)
+
 	// Check if the "Category" field is present and is a string
-	category, ok := temp["Category"].(string)
-	if !ok {
-		fmt.Println("Error: Category field is missing or not a string")
-		return
-	}
+	category, _ := temp["Category"].(string)
 
 	// detect long connection or short connection
 	if category == "LC" {
-		log.Println("Long connection: " + remoteAddr)
+		log.Println("Long connection from: " + remoteAddr)
 		HandleLongConnection(conn)
 	} else if category == "SC" {
 		log.Println("Short connection: " + remoteAddr + ", about: " + command)
 		switch command {
 		case "CMD2":
 			var currentMessage models.CMD2Message
-			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
-			if err != nil {
-				log.Println("Error unmarshaling JSON:", err)
-				return
-			}
+			_ = json.Unmarshal([]byte(buf[:n]), &currentMessage)
 			HandleCMD2(conn, currentMessage)
 		case "CMD3":
 			var currentMessage models.CMD3Message
-			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
-			if err != nil {
-				log.Println("Error unmarshaling JSON:", err)
-				return
-			}
+			_ = json.Unmarshal([]byte(buf[:n]), &currentMessage)
 			HandleCMD3(conn, currentMessage)
 			currentMessage.Category = "LC"
 			chcmd3 <- currentMessage
@@ -78,33 +56,21 @@ func HandleLongConnection(conn net.Conn) {
 	for {
 		conn.SetReadDeadline(time.Now().Add(30 * time.Second))
 
-		n, err := conn.Read(buf)
-		if err != nil {
-			fmt.Println("Error reading message:", err)
-		}
+		n, _ := conn.Read(buf)
 
 		// deserialize json format for detecting long connection or short connection
 		var temp map[string]interface{}
-		err = json.Unmarshal(buf[:n], &temp)
-		if err != nil {
-			fmt.Println("Error unmarshaling JSON:", err)
-		}
+		_ = json.Unmarshal(buf[:n], &temp)
 		// Check if the "Command" field is present and is a string
-		command, ok := temp["Command"].(string)
-		if !ok {
-			fmt.Println("Error: Command field is missing or not a string")
-		}
+		command, _ := temp["Command"].(string)
 		switch command {
 		case "CMD3":
 			var currentMessage models.CMD3Message
-			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
-			if err != nil {
-				log.Println("Error unmarshaling JSON:", err)
-			}
+			_ = json.Unmarshal([]byte(buf[:n]), &currentMessage)
 			HandleCMD3(conn, currentMessage)
 		}
 		// 回應數據
-		_, err = conn.Write([]byte("Server Acknowledged: "))
+		_, err := conn.Write([]byte("Server Acknowledged: "))
 		if err != nil {
 			fmt.Println("Error writing to long connection:", err)
 			break
