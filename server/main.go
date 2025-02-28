@@ -36,6 +36,6 @@ func main() {
 			continue
 		}
 		// handle new connection and basically for short connection
-		go services.HandleNewConnection(conn, CMD3Channel) 
+		go services.HandleNewConnection(conn, CMD3Channel, len(other_ports)) 
 	}
 }

@@ -11,7 +11,7 @@ import (
 	"github.com/Distributed-Ledger/server/functions"
 )
 
-func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message) {
+func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message, node_amount int) {
 	defer conn.Close()
 	// get remote ip address
 	remoteAddr := conn.RemoteAddr().String()
@@ -46,7 +46,9 @@ func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message) {
 			_ = json.Unmarshal([]byte(buf[:n]), &currentMessage)
 			HandleCMD3(conn, currentMessage)
 			currentMessage.Category = "LC"
-			chcmd3 <- currentMessage
+			for i := 0; i < node_amount; i++ {
+				chcmd3 <- currentMessage
+			}
 	}
 	}
 }
