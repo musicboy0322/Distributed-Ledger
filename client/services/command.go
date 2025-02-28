@@ -70,31 +70,11 @@ func Transition(fromWallet string, toWallet string, amount string, ports []int) 
 	if functions.TransitMoney(fromWallet, toWallet, amount) == false {
 		fmt.Println("Do not have enough money to complete transition")
 	} else {
-		if functions.CheckFirstBlock() == false {
-			functions.InitialzeFirstBlock()
+		result := functions.SocketConnection(port, information)
+		if result == "false" {
+			fmt.Println("Fail to write in block")
 		}
-		targetBlock := functions.CheckWriteBlock()
-		if functions.CheckBlockMax(targetBlock) == false {
-			// situation of block not full
-			functions.WriteTransition(fromWallet, toWallet, amount, targetBlock)
-			result := functions.SocketConnection(port, information)
-			if result == "false" {
-				fmt.Println("Fail to write in block")
-			}
-			fmt.Println("Sucessfully write in block")
-		} else {
-			// situation of block is full
-			newTxtName := functions.GetNewTxtName(targetBlock)
-			content := functions.RewriteTxt(targetBlock, newTxtName)
-			sha256Content := utils.Sha256Encrytion(content)
-			functions.InitialzeBlock(newTxtName, sha256Content)
-			functions.WriteTransition(fromWallet, toWallet, amount, "./blocks/" + newTxtName)
-			result := functions.SocketConnection(port, information)
-			if result == "false" {
-				fmt.Println("Fail to write in block")
-			}
-			fmt.Println("Sucessfully write in block")
-		}
+		fmt.Println("Sucessfully write in block")
 	}
 }
 
