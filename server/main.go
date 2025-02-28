@@ -15,8 +15,6 @@ func main() {
 	functions.InitialzeBlocksFolder()
 	port := utils.GetServerPort(0)	
 	CMD3Channel := make(chan models.CMD3Message, 50)
-	CMD5Channel := make(chan models.CMD5Message, 50)
-	CMD5BlockCorrectChannel := make(chan bool)
 	other_ports := utils.GetOtherPorts(port)
 
 	// open server
@@ -28,7 +26,7 @@ func main() {
 	log.Println("Listen to 127.0.0.1:" + port)
 
 	// sending functionality
-	services.ConnectNodes(other_ports, CMD3Channel, CMD5Channel, CMD5BlockCorrectChannel)
+	services.ConnectNodes(other_ports, CMD3Channel)
 
 	// receiving functionality
 	for {
@@ -38,6 +36,6 @@ func main() {
 			continue
 		}
 		// handle new connection and basically for short connection
-		go services.HandleNewConnection(conn, CMD3Channel, CMD5Channel, CMD5BlockCorrectChannel) 
+		go services.HandleNewConnection(conn, CMD3Channel) 
 	}
 }

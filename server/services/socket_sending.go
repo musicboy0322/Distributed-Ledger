@@ -14,14 +14,14 @@ const (
 )
 
 // connect nodes for long connection in sequence
-func ConnectNodes(other_ports []string, chcmd3 chan models.CMD3Message, chcmd5 chan models.CMD5Message, chcmd5blockcorrect chan bool) {
+func ConnectNodes(other_ports []string, chcmd3 chan models.CMD3Message) {
 	for _, other_port := range other_ports{
-		go ConnectNode(other_port, chcmd3, chcmd5, chcmd5blockcorrect)
+		go ConnectNode(other_port, chcmd3)
 	}
 }
 
 // connect node for long connection
-func ConnectNode(other_port string, chcmd3 chan models.CMD3Message, chcmd5 chan models.CMD5Message, chcmd5blockcorrect chan bool) {
+func ConnectNode(other_port string, chcmd3 chan models.CMD3Message) {
 	
 	node_address := "127.0.0.1:" + other_port
 	node_status := false
@@ -59,12 +59,12 @@ func ConnectNode(other_port string, chcmd3 chan models.CMD3Message, chcmd5 chan 
 	for {
 		select {
 		case information := <-chcmd3:
+			fmt.Println("cmd3")
 			fmt.Println(information)
 			serializedInformation, err := information.Serialize()
 			if err != nil {
 				log.Println("Error serializing information:", err)
 			}
-			fmt.Println(serializedInformation)
 			// send information to target port
 			_, err = conn.Write(serializedInformation) 
 			if err != nil {
@@ -74,24 +74,6 @@ func ConnectNode(other_port string, chcmd3 chan models.CMD3Message, chcmd5 chan 
 			_, err = conn.Read(buf[:])
 			if err != nil {
 				log.Println("Recv failed:", err)
-			}
-		case information := <-chcmd5:
-			serializedInformation, err := information.Serialize()
-			if err != nil {
-				log.Println("Error serializing information:", err)
-			}
-			// send information to target port
-			_, err = conn.Write(serializedInformation) 
-			if err != nil {
-				log.Println("err :", err)
-			}
-			buf := [512]byte{}
-			n, err = conn.Read(buf[:])
-			if err != nil {
-				log.Println("Recv failed:", err)
-			}
-			if n == true {
-				chcmd5blockcorrect 
 			}
 		default:
 			// Sleep to avoid busy-waiting

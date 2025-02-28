@@ -192,6 +192,28 @@ func InitialzeBlock(newTxtName string, sha256Content string) {
 	writer.Flush()
 }
 
+func SearchLog(wallet string, blocks []string) string {
+	var historyLog string
+	for _, block := range blocks {
+		blockFile, err := os.Open(block)
+		if err != nil {
+			fmt.Println("Fail to open file:", err)
+		}
+		defer blockFile.Close()
+
+		scanner := bufio.NewScanner(blockFile)
+
+		lineNumber := 1
+		for scanner.Scan() {
+			if strings.Contains(scanner.Text(), wallet) {
+				historyLog = historyLog + "\n" + scanner.Text()
+			}
+			lineNumber++
+		}
+	}
+	return historyLog
+}
+
 func ListAllBlock() []string {
 	var blocks []string
 	var nextBlock string = "./blocks/1.txt"

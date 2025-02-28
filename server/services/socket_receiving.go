@@ -11,8 +11,7 @@ import (
 	"github.com/Distributed-Ledger/server/functions"
 )
 
-//storage_queue chan string
-func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message, chcmd5 chan models.CMD5Message) {
+func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message) {
 	defer conn.Close()
 	// get remote ip address
 	remoteAddr := conn.RemoteAddr().String()
@@ -45,7 +44,6 @@ func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message, chcmd5 c
 		return
 	}
 
-	
 	// detect long connection or short connection
 	if category == "LC" {
 		log.Println("Long connection: " + remoteAddr)
@@ -53,6 +51,14 @@ func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message, chcmd5 c
 	} else if category == "SC" {
 		log.Println("Short connection: " + remoteAddr + ", about: " + command)
 		switch command {
+		case "CMD2":
+			var currentMessage models.CMD2Message
+			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
+			if err != nil {
+				log.Println("Error unmarshaling JSON:", err)
+				return
+			}
+			HandleCMD2(conn, currentMessage)
 		case "CMD3":
 			var currentMessage models.CMD3Message
 			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
@@ -60,20 +66,10 @@ func HandleNewConnection(conn net.Conn, chcmd3 chan models.CMD3Message, chcmd5 c
 				log.Println("Error unmarshaling JSON:", err)
 				return
 			}
+			HandleCMD3(conn, currentMessage)
 			currentMessage.Category = "LC"
 			chcmd3 <- currentMessage
-			HandleCMD3(conn, currentMessage)
-		case "CMD5":
-			var currentMessage models.CMD5Message
-			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
-			if err != nil {
-				log.Println("Error unmarshaling JSON:", err)
-				return
-			}
-			currentMessage.Category = "LC"
-			chcmd5 <- currentMessage
-			HandleCMD5(conn, currentMessage)
-		}
+	}
 	}
 }
 
@@ -106,13 +102,6 @@ func HandleLongConnection(conn net.Conn) {
 				log.Println("Error unmarshaling JSON:", err)
 			}
 			HandleCMD3(conn, currentMessage)
-		case "CMD5":
-			var currentMessage models.CMD5Message
-			err = json.Unmarshal([]byte(buf[:n]), &currentMessage)
-			if err != nil {
-				log.Println("Error unmarshaling JSON:", err)
-			}
-			HandleCMD5(conn, currentMessage)
 		}
 		// 回應數據
 		_, err = conn.Write([]byte("Server Acknowledged: "))
@@ -121,6 +110,13 @@ func HandleLongConnection(conn net.Conn) {
 			break
 		}
 	}
+}
+
+func HandleCMD2(conn net.Conn, message models.CMD2Message) {
+	wallet := message.Wallet
+	blocks := functions.ListAllBlock()
+	transitionLog := functions.SearchLog(wallet, blocks)
+	conn.Write([]byte(transitionLog))
 }
 
 func HandleCMD3(conn net.Conn, message models.CMD3Message) {
@@ -144,6 +140,7 @@ func HandleCMD3(conn net.Conn, message models.CMD3Message) {
 	conn.Write([]byte("true"))
 }
 
+/*
 func HandleCMD5(conn net.Conn, message models.CMD5Message) {
 	clientSha256Content := message.Sha256Content
 	blocks := functions.ListAllBlock()
@@ -156,3 +153,4 @@ func HandleCMD5(conn net.Conn, message models.CMD5Message) {
 		conn.Write([]byte("false"))
 	}
 }
+*/
