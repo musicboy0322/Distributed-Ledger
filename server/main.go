@@ -12,10 +12,11 @@ import (
 
 func main() {
 	// initialize variables
+	var other_ports []string
 	functions.InitialzeBlocksFolder()
-	port := utils.GetServerPort(0)	
+	port := utils.GetServerPort(0)
 	CMD3Channel := make(chan models.CMD3Message, 50)
-	other_ports := utils.GetOtherPorts(port)
+	other_ports = utils.GetOtherPorts(port)
 
 	// open server
 	listen, err := net.Listen("tcp", "127.0.0.1:" + port)
