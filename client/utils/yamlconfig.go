@@ -11,7 +11,7 @@ func GetEnterPorts() []int {
 	vp := viper.New()
 	vp.SetConfigName("config")
 	vp.SetConfigType("yaml")
-	vp.AddConfigPath("../")
+	vp.AddConfigPath("./")
 	err := vp.ReadInConfig()
 	if err != nil {
 		panic(fmt.Errorf("fatal error config file: %w", err))
