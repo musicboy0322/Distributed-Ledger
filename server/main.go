@@ -14,7 +14,7 @@ func main() {
 	// initialize variables
 	var other_ports []string
 	functions.InitialzeBlocksFolder()
-	port := utils.GetServerPort(0)
+	port := utils.GetServerPort(2)
 	CMD3Channel := make(chan models.CMD3Message, 50)
 	other_ports = utils.GetOtherPorts(port)
 
