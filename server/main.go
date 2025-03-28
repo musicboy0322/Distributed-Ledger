@@ -12,22 +12,23 @@ import (
 
 func main() {
 	// initialize variables
-	var other_ports []string
+	var other_servers []string
 	functions.InitialzeBlocksFolder()
-	port := utils.GetServerPort(2)
 	CMD3Channel := make(chan models.CMD3Message, 50)
-	other_ports = utils.GetOtherPorts(port)
+
+	port := "8082"
+	other_servers = utils.GetOtherServers(port)
 
 	// open server
-	listen, err := net.Listen("tcp", "127.0.0.1:" + port)
+	listen, err := net.Listen("tcp", "0.0.0.0:" + port)
 	if err != nil {
 		fmt.Println("Listen failed:", err)
 		return
 	}
-	log.Println("Node open: 127.0.0.1:" + port)
+	log.Println("Node open: 0.0.0.0:" + port)
 
 	// open sending functionality
-	services.ConnectNodes(other_ports, CMD3Channel)
+	services.ConnectNodes(other_servers, CMD3Channel)
 
 	// open receiving functionality
 	for {
@@ -37,6 +38,6 @@ func main() {
 			continue
 		}
 		// handle new connection and basically for short connection
-		go services.HandleNewConnection(conn, CMD3Channel, len(other_ports)) 
+		go services.HandleNewConnection(conn, CMD3Channel, len(other_servers)) 
 	}
 }

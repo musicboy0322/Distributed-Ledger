@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nodetwo
-        image: musicboy0322/distributed-ledger-node-two:latest
+        image: musicboy0322/distributed-node-two:latest
         command: ["go", "run", "main.go", "/app"]
         ports: 
         - containerPort: 8081

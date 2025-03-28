@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
       - name: nodethree
-        image: musicboy0322/distributed-ledger-node-three:latest
+        image: musicboy0322/distributed-node-three:latest
         command: ["go", "run", "main.go", "/app"]
         ports: 
         - containerPort: 8082

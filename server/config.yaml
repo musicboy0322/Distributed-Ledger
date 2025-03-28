@@ -2,3 +2,7 @@ server_ports:
   - 8080
   - 8081
   - 8082
+server_address:
+  - nodeone:8080
+  - nodetwo:8081
+  - nodethree:8082

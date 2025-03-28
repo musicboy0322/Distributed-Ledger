@@ -13,16 +13,16 @@ const (
 )
 
 // connect nodes for long connection in sequence
-func ConnectNodes(other_ports []string, chcmd3 chan models.CMD3Message) {
-	for _, other_port := range other_ports{
-		go ConnectNode(other_port, chcmd3)
+func ConnectNodes(other_servers []string, chcmd3 chan models.CMD3Message) {
+	for _, other_server := range other_servers{
+		go ConnectNode(other_server, chcmd3)
 	}
 }
 
 // connect node for long connection
-func ConnectNode(other_port string, chcmd3 chan models.CMD3Message) {
+func ConnectNode(other_server string, chcmd3 chan models.CMD3Message) {
 	
-	node_address := "127.0.0.1:" + other_port
+	node_address := other_server
 	node_status := false
 
 	// checking node is available to connect or not
