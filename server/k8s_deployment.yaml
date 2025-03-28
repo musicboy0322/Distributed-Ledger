@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodeone
+  labels:
+    app: nodeone
+spec:
+  selector:
+    matchLabels:
+      app: nodeone
+  template:
+    metadata:
+      labels:
+        app: nodeone
+    spec:
+      containers:
+      - name: nodeone
+        image: musicboy0322/distributed-node-one:latest
+        command: ["go", "run", "main.go", "/app"]
+        ports: 
+        - containerPort: 8080
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodetwo
+  labels:
+    app: nodetwo
+spec:
+  selector:
+    matchLabels:
+      app: nodetwo
+  template:
+    metadata:
+      labels:
+        app: nodetwo
+    spec:
+      containers:
+      - name: nodetwo
+        image: musicboy0322/distributed-node-two:latest
+        command: ["go", "run", "main.go", "/app"]
+        ports: 
+        - containerPort: 8081
+
+---
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nodethree
+  labels:
+    app: nodethree
+spec:
+  selector:
+    matchLabels:
+      app: nodethree
+  template:
+    metadata:
+      labels:
+        app: nodethree
+    spec:
+      containers:
+      - name: nodethree
+        image: musicboy0322/distributed-node-three:latest
+        command: ["go", "run", "main.go", "/app"]
+        ports: 
+        - containerPort: 8082

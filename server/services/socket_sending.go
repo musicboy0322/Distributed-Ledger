@@ -72,6 +72,7 @@ func ConnectNode(other_server string, chcmd3 chan models.CMD3Message) {
 			if err != nil {
 				log.Println("Recv failed:", err)
 			}
+			time.Sleep(30 * time.Second)
 		default:
 			// Sleep to avoid busy-waiting
 			time.Sleep(20 * time.Second)
