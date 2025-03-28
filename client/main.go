@@ -18,7 +18,7 @@ func main() {
 	)
 
 	services.InitialzeFolder()
-	ports := utils.GetEnterPorts()
+	servers := utils.GetEnterServer()
 
 	for true {
 		fmt.Print("Enter a number (1)Check Money (2)Check Log (3)Transition (4)Quit : ")
@@ -27,9 +27,9 @@ func main() {
 		case "1":
 			services.CheckMoney(wallet)
 		case "2":
-			services.CheckLog(wallet, ports)
+			services.CheckLog(wallet, servers)
 		case "3":
-			services.Transition(fromWallet, toWallet, amount, ports)
+			services.Transition(fromWallet, toWallet, amount, servers)
 		case "4":
 			os.Exit(0)
 		default:

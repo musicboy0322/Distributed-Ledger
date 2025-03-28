@@ -24,7 +24,7 @@ func CheckMoney(wallet string) {
 	fmt.Println("Balance: " + balance)
 }
 
-func CheckLog(wallet string, ports []int) {
+func CheckLog(wallet string, servers []string) {
 	// get user message
 	fmt.Print("Enter which wallet: ")
 	fmt.Scanln(&wallet)
@@ -35,13 +35,13 @@ func CheckLog(wallet string, ports []int) {
 		Wallet: wallet,
 	}
 	// random choose a port for connecting
-	port := utils.GetRandomPort(ports)
+	server := utils.GetRandomServers(servers)
 	// socket connect
-	result := functions.SocketConnection(port, information)
+	result := functions.SocketConnection(server, information)
 	fmt.Println("History transitions: " + result)	
 }
 
-func Transition(fromWallet string, toWallet string, amount string, ports []int) {
+func Transition(fromWallet string, toWallet string, amount string, servers []string) {
 	// procedure of asking information
 	fmt.Print("Enter which wallet to use: ")
 	fmt.Scanln(&fromWallet)
@@ -65,12 +65,12 @@ func Transition(fromWallet string, toWallet string, amount string, ports []int) 
 	}
 
 	// random choose a port for connecting
-	port := utils.GetRandomPort(ports)
+	server := utils.GetRandomServers(servers)
 	// process
 	if functions.TransitMoney(fromWallet, toWallet, amount) == false {
 		fmt.Println("Do not have enough money to complete transition")
 	} else {
-		result := functions.SocketConnection(port, information)
+		result := functions.SocketConnection(server, information)
 		if result == "false" {
 			fmt.Println("Fail to write in block")
 		}

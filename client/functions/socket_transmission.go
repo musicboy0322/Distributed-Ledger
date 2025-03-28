@@ -4,15 +4,12 @@ import (
     "fmt"
     "net"
 	"strings"
-	"strconv"
 	"github.com/Distributed-Ledger/client/models"
 )
 
-func SocketConnection(port int, information models.CommandMessage) string {
-	// turn port data type from int to string
-	portString := strconv.Itoa(port)
+func SocketConnection(server string, information models.CommandMessage) string {
 	// connect to target port
-	conn, err := net.Dial("tcp", "0.0.0.0:" + portString)
+	conn, err := net.Dial("tcp", server)
 	if err != nil {
 		fmt.Println("err :", err)
 	}
