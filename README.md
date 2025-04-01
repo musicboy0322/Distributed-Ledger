@@ -27,6 +27,6 @@
 * Technique:
     * Programming Language: Golang
     * Network Programming: Socket, TCP
-    * DevOps Tools: Docker, Kubernetes
+    * DevOps Tools: Docker, Kubernetes(Minikube)
 
 * Demo: [https://youtu.be/h7gLIvKN9pk](https://youtu.be/NwrnfNtub5o)
